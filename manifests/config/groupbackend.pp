@@ -117,8 +117,32 @@ define icingaweb2::config::groupbackend(
     }
   }
 
-  icingaweb2::inisection { $title:
-    target   => "${conf_dir}/groups.ini",
-    settings => delete_undef_values($settings),
+  Ini_Setting {
+    ensure  => present,
+    section => $group_name,
+    require => File["${::icingaweb2::config_dir}/groups.ini"],
+    path    => "${::icingaweb2::config_dir}/groups.ini",
   }
+
+  ini_setting { "icingaweb2 group ${title} backend":
+    setting => 'backend',
+    value   => "\"$settings[backend]\"",
+  }
+  ini_setting { "icingaweb2 group ${title} resource":
+    setting => 'resource',
+    value   => "\"$settings[resource]\"",
+  }
+  ini_setting { "icingaweb2 group ${title} ldap_user_backend":
+    setting => 'ldap_user_backend',
+    value   => "\"$settings[user_backend]\"",
+  }
+  ini_setting { "icingaweb2 group ${title} ldap_nested_group_search":
+    setting => 'ldap_nested_group_search',
+    value   => "\"$settings[nested_group_search]\"",
+  }
+
+  #  icingaweb2::inisection { $title:
+  #  target   => "${conf_dir}/groups.ini",
+  #  settings => delete_undef_values($settings),
+  #}
 }
