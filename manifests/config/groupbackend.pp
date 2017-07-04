@@ -126,19 +126,19 @@ define icingaweb2::config::groupbackend(
 
   ini_setting { "icingaweb2 group ${title} backend":
     setting => 'backend',
-    value   => "\"$settings[backend]\"",
+    value   => "\"$backend\"",
   }
   ini_setting { "icingaweb2 group ${title} resource":
     setting => 'resource',
-    value   => "\"$settings[resource]\"",
+    value   => "\"$resource\"",
   }
   ini_setting { "icingaweb2 group ${title} ldap_user_backend":
-    setting => 'ldap_user_backend',
-    value   => "\"$settings[user_backend]\"",
+    setting => 'user_backend',
+    value   => "\"$ldap_user_backend\"",
   }
   ini_setting { "icingaweb2 group ${title} ldap_nested_group_search":
-    setting => 'ldap_nested_group_search',
-    value   => "\"$settings[nested_group_search]\"",
+    setting => 'nested_group_search',
+    value   => "\"$ldap_nested_group_search_as_string\"",
   }
 
   #  icingaweb2::inisection { $title:
