@@ -93,7 +93,7 @@ class icingaweb2::config (
       }
     }
     'msldap': {
-      icingaweb2::config::authentication_database { 'Active Directory Authentication':
+      icingaweb2::config::authentication_msldap { 'Active Directory Authentication':
         auth_section  => 'icingaweb2',
         auth_resource => $::icingaweb2::auth_resource,
         filter              => $::icingaweb2::auth_ldap_filter,
