@@ -96,6 +96,8 @@ class icingaweb2::config (
       icingaweb2::config::authentication_database { 'Active Directory Authentication':
         auth_section  => 'icingaweb2',
         auth_resource => $::icingaweb2::auth_resource,
+        filter              => $::icingaweb2::auth_ldap_filter,
+        base_dn             => $::icingaweb2::auth_ldap_base_dn,
       }
     }
     
