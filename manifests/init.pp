@@ -296,6 +296,18 @@ class icingaweb2 (
     }
   }
 
+  if $::icingaweb2::auth_backend == 'msldap' {
+    validate_integer($ldap_port)
+    validate_string($auth_ldap_base_dn)
+    validate_string($auth_ldap_filter)
+    validate_string($auth_ldap_user_class)
+    validate_string($auth_ldap_user_name_attribute)
+    validate_string($ldap_host)
+    validate_string($ldap_bind_dn)
+    validate_string($ldap_bind_pw)
+    validate_string($ldap_root_dn)
+  }
+
   if $::icingaweb2::manage_apache_vhost {
     validate_string($template_apache)
   }
