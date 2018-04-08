@@ -53,7 +53,7 @@ define icingaweb2::config::authmethod(
 
   validate_re($backend,
     [
-      'external'
+      'external',
       'db',
       'ldap',
       'msldap'

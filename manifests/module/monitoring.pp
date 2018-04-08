@@ -95,10 +95,7 @@ class icingaweb2::module::monitoring(
   }
 
   $security_settings = {
-    'protected_customvars' => $protected_customvars ? {
-      String        => $protected_customvars,
-      Array[String] => join($protected_customvars, ','),
-    }
+    'protected_customvars' => join($protected_customvars, ',')
   }
 
   $settings = {

@@ -77,7 +77,7 @@ define icingaweb2::module(
       'git',
       'none',
       'package',
-    ]
+    ],
     "${install_method} isn't supported. Valid values are 'git', 'none' and 'packages'"
   )
   if $git_repository { validate_string($git_repository) }
