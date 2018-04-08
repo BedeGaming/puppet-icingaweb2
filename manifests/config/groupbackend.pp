@@ -56,18 +56,37 @@
 #
 #
 define icingaweb2::config::groupbackend(
-  String                       $group_name                  = $title,
-  Enum['db', 'ldap', 'msldap'] $backend                     = undef,
-  String                       $resource                    = undef,
-  Optional[String]             $ldap_user_backend           = undef,
-  Optional[String]             $ldap_group_class            = undef,
-  Optional[String]             $ldap_group_filter           = undef,
-  Optional[String]             $ldap_group_name_attribute   = undef,
-  Optional[String]             $ldap_group_member_attribute = undef,
-  Optional[String]             $ldap_base_dn                = undef,
-  Optional[Boolean]            $ldap_nested_group_search    = undef,
-  Optional[String]             $domain                      = undef,
+  $group_name                  = $title,
+  $backend                     = undef,
+  $resource                    = undef,
+  $ldap_user_backend           = undef,
+  $ldap_group_class            = undef,
+  $ldap_group_filter           = undef,
+  $ldap_group_name_attribute   = undef,
+  $ldap_group_member_attribute = undef,
+  $ldap_base_dn                = undef,
+  $ldap_nested_group_search    = undef,
+  $domain                      = undef,
 ) {
+
+  validate_string($group_name)
+  validate_re($backend,
+    [ 
+      'db',
+      'ldap',
+      'msldap'
+    ],
+    "${backend} isn't supported. Valid values are 'db', 'ldap' and 'msldap'"
+  )
+  validate_string($resource)
+  if $ldap_user_backend { validate_string($ldap_user_backend) }
+  if $ldap_group_class { validate_string($ldap_group_class) }
+  if $ldap_group_filter { validate_string($ldap_group_filter) }
+  if $ldap_group_name_attribute { validate_string($ldap_group_name_attribute) }
+  if $ldap_group_member_attribute { validate_string($ldap_group_member_attribute) }
+  if $ldap_base_dn { validate_string($ldap_base_dn) }
+  if $ldap_nested_group_search { validate_bool($ldap_nested_group_search) }
+  if $domain { validate_string($domain) }
 
   $conf_dir = $::icingaweb2::params::conf_dir
 

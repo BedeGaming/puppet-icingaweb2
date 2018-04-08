@@ -32,11 +32,16 @@
 # }
 #
 define icingaweb2::inisection(
-  Stdlib::Absolutepath $target,
-  String               $section_name  = $title,
-  Hash                 $settings      = {},
-  Pattern[/^\d+$/]     $order         = '01',
+  $target,
+  $section_name  = $title,
+  $settings      = {},
+  $order         = '01',
 ){
+
+  validate_absolute_path($target)
+  validate_string($target)
+  if $settings { validate_hash($settings) }
+  validate_slength($order,2)
 
   $conf_user      = $::icingaweb2::conf_user
   $conf_group     = $::icingaweb2::params::conf_group

@@ -53,15 +53,38 @@
 #     }
 #
 define icingaweb2::module(
-  Enum['absent', 'present']         $ensure         = 'present',
-  String                            $module         = $title,
-  Stdlib::Absolutepath              $module_dir     = "${::icingaweb2::params::module_path}/${title}",
-  Enum['git', 'none', 'package']    $install_method = 'git',
-  Optional[String]                  $git_repository = undef,
-  String                            $git_revision   = 'master',
-  Optional[String]                  $package_name   = undef,
-  Hash                              $settings       = {},
+  $ensure         = 'present',
+  $module         = $title,
+  $module_dir     = "${::icingaweb2::params::module_path}/${title}",
+  $install_method = 'git',
+  $git_repository = undef,
+  $git_revision   = 'master',
+  $package_name   = undef,
+  $settings       = {},
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_string($module)
+  validate_absolute_path($module_dir)
+  validate_re($install_method,
+    [
+      'git',
+      'none',
+      'package',
+    ]
+    "${install_method} isn't supported. Valid values are 'git', 'none' and 'packages'"
+  )
+  if $git_repository { validate_string($git_repository) }
+  validate_string($git_revision)
+  if $package_name { validate_string($package_name) }
+  if $settings { validate_hash($settings) }
+
   $conf_dir   = $::icingaweb2::params::conf_dir
   $conf_user  = $::icingaweb2::conf_user
   $conf_group = $::icingaweb2::params::conf_group
