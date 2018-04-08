@@ -16,12 +16,34 @@
 #   `icingaweb2::module::elasticsearch::eventtype` is used to create the event types.
 #
 class icingaweb2::module::elasticsearch(
-  Enum['absent', 'present'] $ensure         = 'present',
-  String                    $git_repository = 'https://github.com/Icinga/icingaweb2-module-elasticsearch.git',
-  Optional[String]          $git_revision   = undef,
-  Optional[Hash]            $instances      = undef,
-  Optional[Hash]            $eventtypes     = undef,
+  $ensure         = 'present',
+  $git_repository = 'https://github.com/Icinga/icingaweb2-module-elasticsearch.git',
+  $git_revision   = undef,
+  $instances      = undef,
+  $eventtypes     = undef,
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_string($git_repository)
+  if $git_revision { validate_string($git_revision) }
+  if $instance { validate_string($instances) }
+  if $eventtypes { validate_string($eventtypes) }
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_string($git_repository)
+  if $git_revision { validate_string($git_revision) }
 
   if $instances {
     $instances.each |$name, $setting| {

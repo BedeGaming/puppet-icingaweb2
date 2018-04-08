@@ -23,15 +23,30 @@
 #   The value of your icinga 2 GraphiteWriter's attribute `service_name_template` (if specified)
 #
 class icingaweb2::module::graphite(
-  Enum['absent', 'present'] $ensure                                = 'present',
-  String                    $git_repository                        = 'https://github.com/Icinga/icingaweb2-module-graphite.git',
-  Optional[String]          $git_revision                          = undef,
-  String                    $url                                   = undef,
-  Optional[String]          $user                                  = undef,
-  Optional[String]          $password                              = undef,
-  Optional[String]          $graphite_writer_host_name_template    = undef,
-  Optional[String]          $graphite_writer_service_name_template = undef
+  $ensure                                = 'present',
+  $git_repository                        = 'https://github.com/Icinga/icingaweb2-module-graphite.git',
+  $git_revision                          = undef,
+  $url                                   = undef,
+  $user                                  = undef,
+  $password                              = undef,
+  $graphite_writer_host_name_template    = undef,
+  $graphite_writer_service_name_template = undef
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_string($git_repository)
+  if $git_revision { validate_string($git_revision) }
+  validate_string($url)
+  if $user { validate_string($user) }
+  if $password { validate_string($password) }
+  if $graphite_writer_host_name_template { validate_string($graphite_writer_host_name_template) }
+  if $graphite_writer_service_name_template { validate_string($graphite_writer_service_name_template) }
 
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/graphite"

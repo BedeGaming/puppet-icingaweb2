@@ -27,11 +27,23 @@
 #   }
 #
 class icingaweb2::module::generictts(
-  Enum['absent', 'present'] $ensure         = 'present',
-  String                    $git_repository = 'https://github.com/Icinga/icingaweb2-module-generictts.git',
-  Optional[String]          $git_revision   = undef,
-  Hash                      $ticketsystems  = {},
+  $ensure         = 'present',
+  $git_repository = 'https://github.com/Icinga/icingaweb2-module-generictts.git',
+  $git_revision   = undef,
+  $ticketsystems  = {},
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_string($git_repository)
+  if $git_revision { validate_string($git_revision) }
+  validate_hash($ticketsystems)
+
   create_resources('icingaweb2::module::generictts::ticketsystem', $ticketsystems)
 
   icingaweb2::module {'generictts':

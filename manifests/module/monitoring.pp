@@ -33,16 +33,37 @@
 #   A hash of command transports.
 #
 class icingaweb2::module::monitoring(
-  Enum['absent', 'present']      $ensure               = 'present',
-  Variant[String, Array[String]] $protected_customvars = ['*pw*', '*pass*', 'community'],
-  Enum['mysql', 'pgsql']         $ido_type             = 'mysql',
-  Optional[String]               $ido_host             = undef,
-  Integer[1,65535]               $ido_port             = 3306,
-  Optional[String]               $ido_db_name          = undef,
-  Optional[String]               $ido_db_username      = undef,
-  Optional[String]               $ido_db_password      = undef,
-  Hash                           $commandtransports    = undef,
+  $ensure               = 'present',
+  $protected_customvars = ['*pw*', '*pass*', 'community'],
+  $ido_type             = 'mysql',
+  $ido_host             = undef,
+  $ido_port             = 3306,
+  $ido_db_name          = undef,
+  $ido_db_username      = undef,
+  $ido_db_password      = undef,
+  $commandtransports    = undef,
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_re($ido_type,
+    [
+      'mysql',
+      'pgsql',
+    ],
+    "${ido_type} isn't supported. Valid values are 'mysql' and 'pgsql'"
+  )
+  if $ido_host { validate_string($ido_host) }
+  validate_integer($ido_port,65535,1)
+  if $ido_name { validate_string($ido_name) }
+  if $ido_username { validate_string($ido_username) }
+  if $ido_password { validate_string($ido_password) }
+  validate_hash($commandtransports)
 
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/monitoring"

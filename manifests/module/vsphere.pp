@@ -10,10 +10,20 @@
 #
 #
 class icingaweb2::module::vsphere(
-  Enum['absent', 'present'] $ensure           = 'present',
-  String                    $git_repository   = 'https://github.com/Icinga/icingaweb2-module-vsphere.git',
-  Optional[String]          $git_revision     = undef,
+  $ensure           = 'present',
+  $git_repository   = 'https://github.com/Icinga/icingaweb2-module-vsphere.git',
+  $git_revision     = undef,
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_string($git_repository)
+  if $git_revision { validate_string($git_revision) }
 
   icingaweb2::module { 'vsphere':
     ensure         => $ensure,

@@ -17,12 +17,17 @@
 #   Only files with these extensions will be synced. Defaults to `.conf`
 #
 define icingaweb2::module::fileshipper::directory(
-  String               $identifier = $title,
-  Stdlib::Absolutepath $source     = undef,
-  Stdlib::Absolutepath $target     = undef,
-  String               $extensions = '.conf',
+  $identifier = $title,
+  $source     = undef,
+  $target     = undef,
+  $extensions = '.conf',
 ){
   assert_private("You're not supposed to use this defined type manually.")
+
+  validate_string($identifier)
+  validate_absolute_path($source)
+  validate_absolute_path($target)
+  validate_string($extensions)
 
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/fileshipper"

@@ -26,16 +26,29 @@
 #   Path for the transport. Only needed for local transport. Defaults to `/var/run/icinga2/cmd/icinga2.cmd`
 #
 define icingaweb2::module::monitoring::commandtransport(
-  String               $commandtransport = $title,
-  Enum['api', 'local'] $transport        = 'api',
-  String               $host             = 'localhost',
-  Integer[1,65535]     $port             = 5665,
-  Optional[String]     $username         = undef,
-  Optional[String]     $password         = undef,
-  Stdlib::Absolutepath $path             = '/var/run/icinga2/cmd/icinga2.cmd',
+  $commandtransport = $title,
+  $transport        = 'api',
+  $host             = 'localhost',
+  $port             = 5665,
+  $username         = undef,
+  $password         = undef,
+  $path             = '/var/run/icinga2/cmd/icinga2.cmd',
 ){
   assert_private("You're not supposed to use this defined type manually.")
 
+  validate_string($commandtransport)
+  validate_re($transport,
+    [
+      'api',
+      'local',
+    ],
+    "${transport} isn't supported. Valid values are 'api' and 'local'"
+  )
+  validate_integer($port,65535,1)
+  if $username { validate_string($username) }
+  if $password { validate_string($password) }
+  validate_absolute_path($path)
+  
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/monitoring"
 
