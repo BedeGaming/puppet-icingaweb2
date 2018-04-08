@@ -63,7 +63,6 @@ class icingaweb2::module::monitoring(
   if $ido_name { validate_string($ido_name) }
   if $ido_username { validate_string($ido_username) }
   if $ido_password { validate_string($ido_password) }
-  validate_hash($commandtransports)
 
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/monitoring"
