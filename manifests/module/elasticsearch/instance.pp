@@ -28,15 +28,22 @@
 #
 #
 define icingaweb2::module::elasticsearch::instance(
-  String                         $uri                = undef,
-  Optional[String]               $user               = undef,
-  Optional[String]               $password           = undef,
-  Optional[Stdlib::Absolutepath] $ca                 = undef,
-  Optional[Stdlib::Absolutepath] $client_certificate = undef,
-  Optional[Stdlib::Absolutepath] $client_private_key = undef,
+  $uri                = undef,
+  $user               = undef,
+  $password           = undef,
+  $ca                 = undef,
+  $client_certificate = undef,
+  $client_private_key = undef,
 ){
   assert_private("You're not supposed to use this defined type manually.")
 
+  validate_string($uri$)
+  if $user { validate_string($user) }
+  if $password { validate_string($password) }
+  if $ca { validate_absolute_path($ca) }
+  if $client_certificate { validate_absolute_path($client_certificate) }
+  if $client_private_key { validate_absolute_path($client_private_key) }
+  
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/elasticsearch"
 

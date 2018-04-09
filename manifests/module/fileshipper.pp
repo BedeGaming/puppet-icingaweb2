@@ -14,12 +14,24 @@
 #   Deploy plain Icinga 2 configuration files through the Director to your Icinga 2 master.
 #
 class icingaweb2::module::fileshipper(
-  Enum['absent', 'present'] $ensure           = 'present',
-  String                    $git_repository   = 'https://github.com/Icinga/icingaweb2-module-fileshipper.git',
-  Optional[String]          $git_revision     = undef,
-  Hash                      $base_directories = {},
-  Hash                      $directories      = {},
+  $ensure           = 'present',
+  $git_repository   = 'https://github.com/Icinga/icingaweb2-module-fileshipper.git',
+  $git_revision     = undef,
+  $base_directories = {},
+  $directories      = {},
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_string($git_repository)
+  if $git_revision { validate_string($git_revision) }
+  validate_hash($base_directories)
+  validate_hash($directories)
 
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/fileshipper"

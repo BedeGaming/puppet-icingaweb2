@@ -14,10 +14,21 @@
 #   Set either a branch or a tag name, eg. `master` or `v2.1.0`.
 #
 class icingaweb2::module::businessprocess(
-  Enum['absent', 'present'] $ensure         = 'present',
-  String                    $git_repository = 'https://github.com/Icinga/icingaweb2-module-businessprocess.git',
-  Optional[String]          $git_revision   = undef,
+  $ensure         = 'present',
+  $git_repository = 'https://github.com/Icinga/icingaweb2-module-businessprocess.git',
+  $git_revision   = undef,
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_string($git_repository)
+  if $git_revision { validate_string($git_revision) }
+
   icingaweb2::module {'businessprocess':
     ensure         => $ensure,
     git_repository => $git_repository,

@@ -11,10 +11,13 @@
 #   Absolute path of a direcory
 #
 define icingaweb2::module::fileshipper::basedir(
-  String               $identifier = $title,
-  Stdlib::Absolutepath $basedir    = undef,
+  $identifier = $title,
+  $basedir    = undef,
 ){
   assert_private("You're not supposed to use this defined type manually.")
+
+  validate_string($identifier)
+  validate_absolute_path($basedir)
 
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/fileshipper"

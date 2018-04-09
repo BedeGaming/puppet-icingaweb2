@@ -8,8 +8,16 @@
 #   Enable or disable module. Defaults to `present`
 #
 class icingaweb2::module::translation(
-  Enum['absent', 'present'] $ensure = 'present',
+  $ensure = 'present',
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
 
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/translation"

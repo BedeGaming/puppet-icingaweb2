@@ -14,10 +14,21 @@
 #   Set either a branch or a tag name, eg. `master` or `v1.0.0`.
 #
 class icingaweb2::module::cube(
-  Enum['absent', 'present'] $ensure         = 'present',
-  String                    $git_repository = 'https://github.com/Icinga/icingaweb2-module-cube.git',
-  Optional[String]          $git_revision   = undef,
+  $ensure         = 'present',
+  $git_repository = 'https://github.com/Icinga/icingaweb2-module-cube.git',
+  $git_revision   = undef,
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_string($git_repository)
+  if $git_revision { validate_string($git_revision) }
+
   icingaweb2::module {'cube':
     ensure         => $ensure,
     git_repository => $git_repository,

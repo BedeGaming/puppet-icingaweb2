@@ -41,15 +41,32 @@
 # }
 #
 define icingaweb2::config::authmethod(
-  Enum['external', 'ldap', 'msldap', 'db'] $backend                  = undef,
-  Optional[String]                         $resource                 = undef,
-  Optional[String]                         $ldap_user_class          = undef,
-  Optional[String]                         $ldap_user_name_attribute = undef,
-  Optional[String]                         $ldap_filter              = undef,
-  Optional[String]                         $ldap_base_dn             = undef,
-  Optional[String]                         $domain                   = undef,
-  Pattern[/^\d+$/]                         $order                    = '01',
+  $backend                  = undef,
+  $resource                 = undef,
+  $ldap_user_class          = undef,
+  $ldap_user_name_attribute = undef,
+  $ldap_filter              = undef,
+  $ldap_base_dn             = undef,
+  $domain                   = undef,
+  $order                    = '01',
 ) {
+
+  validate_re($backend,
+    [
+      'external',
+      'db',
+      'ldap',
+      'msldap'
+    ],
+    "${backend} isn't supported. Valid values are 'external', 'db', 'ldap' and 'msldap'"
+  )
+  if $resource { validate_string($resource) }
+  if $ldap_user_class { validate_string($ldap_user_class) }
+  if $ldap_user_name_attribute { validate_string($ldap_user_name_attribute) }
+  if $ldap_filter { validate_string($ldap_filter) }
+  if $ldap_base_dn { validate_string($ldap_base_dn) }
+  if $domain { validate_bool($domain) }
+  validate_slength($order,2)
 
   $conf_dir = $::icingaweb2::params::conf_dir
 

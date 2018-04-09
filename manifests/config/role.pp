@@ -43,12 +43,18 @@
 # }
 #
 define icingaweb2::config::role(
-  String           $role_name   = $title,
-  Optional[String] $users       = undef,
-  Optional[String] $groups      = undef,
-  Optional[String] $permissions = undef,
-  Hash             $filters     = {},
+  $role_name   = $title,
+  $users       = undef,
+  $groups      = undef,
+  $permissions = undef,
+  $filters     = {},
 ) {
+
+  validate_string($role_name)
+  if $users { validate_string($users) }
+  if $groups { validate_string($groups) }
+  if $permissions { validate_string($permissions) }
+  if $filters { validate_hash($filters) }
 
   $conf_dir = $::icingaweb2::params::conf_dir
 

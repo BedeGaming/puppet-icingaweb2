@@ -8,8 +8,16 @@
 #   Enable or disable module. Defaults to `present`
 #
 class icingaweb2::module::doc(
-  Enum['absent', 'present'] $ensure = 'present',
+  $ensure = 'present',
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
 
   case $::osfamily {
     'Debian': {

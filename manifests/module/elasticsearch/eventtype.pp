@@ -22,12 +22,17 @@
 #   Note that the `@timestamp` field is always respected.
 #
 define icingaweb2::module::elasticsearch::eventtype(
-  String $instance = undef,
-  String $index    = undef,
-  String $filter   = undef,
-  String $fields   = undef,
+  $instance = undef,
+  $index    = undef,
+  $filter   = undef,
+  $fields   = undef,
 ){
   assert_private("You're not supposed to use this defined type manually.")
+
+  validate_string($instance)
+  validate_string($index)
+  validate_string($filter)
+  validate_string($fields)
 
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/elasticsearch"

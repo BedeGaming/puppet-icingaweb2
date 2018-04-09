@@ -53,23 +53,53 @@
 #   Icinga 2 API password. This setting is only valid if `kickstart` is `true`.
 #
 class icingaweb2::module::director(
-  Enum['absent', 'present'] $ensure         = 'present',
-  String                    $git_repository = 'https://github.com/Icinga/icingaweb2-module-director.git',
-  Optional[String]          $git_revision   = undef,
-  Enum['mysql', 'pgsql']    $db_type        = 'mysql',
-  Optional[String]          $db_host        = undef,
-  Integer[1,65535]          $db_port        = 3306,
-  Optional[String]          $db_name        = undef,
-  Optional[String]          $db_username    = undef,
-  Optional[String]          $db_password    = undef,
-  Optional[Boolean]         $import_schema  = false,
-  Optional[Boolean]         $kickstart      = false,
-  Optional[String]          $endpoint       = undef,
-  String                    $api_host       = 'localhost',
-  Integer[1,65535]          $api_port       = 5665,
-  Optional[String]          $api_username   = undef,
-  Optional[String]          $api_password   = undef,
+  $ensure         = 'present',
+  $git_repository = 'https://github.com/Icinga/icingaweb2-module-director.git',
+  $git_revision   = undef,
+  $db_type        = 'mysql',
+  $db_host        = undef,
+  $db_port        = 3306,
+  $db_name        = undef,
+  $db_username    = undef,
+  $db_password    = undef,
+  $import_schema  = false,
+  $kickstart      = false,
+  $endpoint       = undef,
+  $api_host       = 'localhost',
+  $api_port       = 5665,
+  $api_username   = undef,
+  $api_password   = undef,
 ){
+
+  validate_re($ensure,
+    [
+      'absent',
+      'present',
+    ],
+    "${ensure} isn't supported. Valid values are 'absent' and 'present'"
+  )
+  validate_string($git_repository)
+  if $git_revision { validate_string($git_revision) }
+  validate_re($db_type,
+    [
+      'mysql',
+      'pgsql',
+    ],
+    "${db_type} isn't supported. Valid values are 'mysql' and 'pgsql'"
+  )
+  if $db_host { validate_string($db_host) }
+  if $db_port { validate_integer($db_port,65535,1) }
+  if $db_name { validate_string($db_name) }
+  if $db_username { validate_string($db_username) }
+  if $db_password { validate_string($db_password) }
+  if $import_schema { validate_bool($import_schema) }
+  if $kickstart { validate_bool($kickstart) }
+  if $endpoint { validate_string($endpoint) }
+  validate_string($api_host)
+  if $api_port { validate_integer($api_port,65535,1) }
+  if $api_username { validate_string($api_username) }
+  if $api_password { validate_string($api_password) }
+
   $conf_dir        = $::icingaweb2::params::conf_dir
   $module_conf_dir = "${conf_dir}/modules/director"
 
