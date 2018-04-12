@@ -98,8 +98,6 @@ define icingaweb2::module(
     $ensure_module_enabled = 'link'
     $ensure_module_config_dir = 'directory'
     $ensure_vcsrepo = 'present'
-
-    create_resources('icingaweb2::inisection', $settings)
   } else {
     $ensure_module_enabled = 'absent'
     $ensure_module_config_dir = 'absent'
@@ -130,7 +128,8 @@ define icingaweb2::module(
     'package': {
       package { $package_name:
         ensure => $ensure,
-      }
+      } ->
+      create_resources('icingaweb2::inisection', $settings)
     }
     default: {
       fail('The installation method you provided is not supported.')
