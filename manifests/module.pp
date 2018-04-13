@@ -128,7 +128,7 @@ define icingaweb2::module(
     'package': {
       package { $package_name:
         ensure => $ensure,
-      } ->
+      }, ->
       create_resources('icingaweb2::inisection', $settings)
     }
     default: {
